@@ -1,8 +1,12 @@
 # integrantes del proyecto
   Hector Javier Cu Garcia
+  
   Rodrigo Alejandro Cuetto Lusky
+  
   Jonathan Josue Ixpanel Panjoj
+  
   Luis Estuardo Pineda Reyes
+  
 # StockFlow — Sistema de Gestión de Inventario
 
 Proyecto final completo desarrollado con **Node.js + Express 5 (API REST), MySQL 8, HTML, JavaScript puro y Bootstrap 5**. Esta versión fue refactorizada con **SOLID, inyección de dependencias, servicios y repositorios**, además de controles de seguridad y pruebas de ejecución.
