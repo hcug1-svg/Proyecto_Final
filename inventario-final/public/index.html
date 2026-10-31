@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111d39">
+  <title>StockFlow · Sistema de inventario</title>
+  <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-icon">▥</div><div><strong>StockFlow</strong><span>Control de inventario</span></div></div>
+      <div class="sidebar-section-label">MENÚ PRINCIPAL</div>
+      <nav class="menu" aria-label="Menú principal">
+        <button class="menu-link active" data-page="dashboard"><span class="nav-symbol">◫</span> Panel general</button>
+        <button class="menu-link" data-page="productos"><span class="nav-symbol">▤</span> Productos</button>
+        <button class="menu-link" data-page="categorias"><span class="nav-symbol">◈</span> Categorías</button>
+        <button class="menu-link" data-page="movimientos"><span class="nav-symbol">⇄</span> Movimientos</button>
+      </nav>
+      <div class="sidebar-footer"><span class="status-dot"></span><span>Sistema de inventario<br><small>Proyecto final · Node.js + MySQL</small></span></div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <div><span class="eyebrow">ADMINISTRACIÓN</span><h1 id="pageTitle">Panel general</h1><p id="pageSubtitle" class="subtitle">Resumen actualizado de tu negocio.</p></div>
+        <div class="top-actions"><span class="live-indicator"><span class="status-dot"></span> Base de datos conectada</span><button class="btn btn-primary primary-button" id="newProductButton" type="button">＋ Nuevo producto</button></div>
+      </div>
+
+      <div id="errorBanner" class="alert alert-danger d-none" role="alert"></div>
+
+      <section id="dashboardView" class="page-view">
+        <div class="welcome-banner"><div><span class="banner-kicker">CENTRO DE CONTROL</span><h2>Tu inventario, bajo control.</h2><p>Administra productos, revisa existencias y registra cada movimiento en un solo lugar.</p><button class="btn btn-light banner-button" type="button" data-page="productos">Explorar productos <span>→</span></button></div><div class="banner-art" aria-hidden="true"><div class="art-back"></div><div class="art-box art-one">▤</div><div class="art-box art-two">▦</div><div class="art-small">✓</div></div></div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon icon-blue">▤</div><div class="stat-label">Productos activos</div><strong id="statProducts">—</strong><span class="stat-caption">Registrados en catálogo</span></div>
+          <div class="stat-card"><div class="stat-icon icon-purple">◈</div><div class="stat-label">Categorías</div><strong id="statCategories">—</strong><span class="stat-caption">Familias de productos</span></div>
+          <div class="stat-card"><div class="stat-icon icon-teal">▥</div><div class="stat-label">Unidades disponibles</div><strong id="statUnits">—</strong><span class="stat-caption">Existencias totales</span></div>
+          <div class="stat-card"><div class="stat-icon icon-orange">!</div><div class="stat-label">Stock bajo</div><strong id="statLow">—</strong><span class="stat-caption">En el mínimo o menos</span></div>
+        </div>
+        <div class="dashboard-grid">
+          <div class="content-card"><div class="section-heading"><div><h3>Movimientos recientes</h3><p>Últimas entradas y salidas registradas</p></div><button class="link-button" data-page="movimientos">Ver historial →</button></div><div id="recentMovements" class="recent-list"><div class="empty-message">Cargando...</div></div></div>
+          <div class="content-card overview-card"><div class="section-heading"><div><h3>Valor del inventario</h3><p>Existencia × precio de cada producto</p></div></div><div class="inventory-value" id="statValue">—</div><div class="small-note">Estimación en quetzales (GTQ) según el precio de venta registrado.</div><hr><h4>Acciones rápidas</h4><button class="quick-action" data-action="movement-entry"><span class="quick-icon quick-green">＋</span><span><strong>Registrar entrada</strong><small>Agregar unidades al inventario</small></span><span>›</span></button><button class="quick-action" data-action="movement-exit"><span class="quick-icon quick-red">−</span><span><strong>Registrar salida</strong><small>Retirar unidades disponibles</small></span><span>›</span></button></div>
+        </div>
+      </section>
+
+      <section id="productosView" class="page-view d-none">
+        <div class="content-card"><div class="section-heading"><div><h3>Catálogo de productos</h3><p id="productCount">Productos registrados en el sistema</p></div><button class="btn btn-outline-primary btn-sm" data-action="new-product">＋ Agregar producto</button></div>
+          <div class="filter-bar"><div class="search-field"><span>⌕</span><input type="search" id="productSearch" class="form-control" placeholder="Buscar por nombre o código SKU..." aria-label="Buscar productos"></div><select id="productCategoryFilter" class="form-select" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select><label class="low-filter"><input class="form-check-input" type="checkbox" id="productLowFilter"> Solo stock bajo</label></div>
+          <div class="table-responsive"><table class="table custom-table align-middle"><thead><tr><th>PRODUCTO</th><th>CATEGORÍA</th><th>PRECIO</th><th>EXISTENCIAS</th><th>ESTADO</th><th class="text-end">ACCIONES</th></tr></thead><tbody id="productRows"></tbody></table></div>
+          <div class="table-foot">Los productos eliminados se archivan para conservar el historial de movimientos.</div>
+        </div>
+      </section>
+
+      <section id="categoriasView" class="page-view d-none"><div class="content-card"><div class="section-heading"><div><h3>Categorías de productos</h3><p>Clasifica los artículos de tu inventario</p></div><button class="btn btn-primary btn-sm" data-action="new-category">＋ Nueva categoría</button></div><div class="table-responsive"><table class="table custom-table align-middle"><thead><tr><th>CATEGORÍA</th><th>DESCRIPCIÓN</th><th>PRODUCTOS ACTIVOS</th><th class="text-end">ACCIONES</th></tr></thead><tbody id="categoryRows"></tbody></table></div></div></section>
+
+      <section id="movimientosView" class="page-view d-none"><div class="content-card"><div class="section-heading"><div><h3>Historial de movimientos</h3><p>Auditoría de entradas y salidas de inventario (últimos 200)</p></div><div class="d-flex gap-2 flex-wrap"><button class="btn btn-outline-success btn-sm" data-action="movement-entry">＋ Entrada</button><button class="btn btn-outline-danger btn-sm" data-action="movement-exit">− Salida</button></div></div><div class="filter-bar"><select class="form-select" id="movementProductFilter" aria-label="Filtrar movimientos por producto"><option value="">Todos los productos</option></select><select class="form-select" id="movementTypeFilter" aria-label="Filtrar movimientos por tipo"><option value="">Todos los tipos</option><option value="ENTRADA">Entradas</option><option value="SALIDA">Salidas</option></select></div><div class="table-responsive"><table class="table custom-table align-middle"><thead><tr><th>FECHA</th><th>PRODUCTO</th><th>TIPO</th><th>CANTIDAD</th><th>OBSERVACIÓN</th></tr></thead><tbody id="movementRows"></tbody></table></div></div></section>
+
+      <footer class="footer">StockFlow · Proyecto final de desarrollo web · Node.js, Express, MySQL, HTML, JS y Bootstrap</footer>
+    </main>
+  </div>
+
+  <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalTitle" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg"><div class="modal-content"><form id="productForm"><div class="modal-header"><h5 class="modal-title" id="productModalTitle">Nuevo producto</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button></div><div class="modal-body"><input type="hidden" name="id" id="productId"><div class="row g-3"><div class="col-md-5"><label class="form-label" for="productSku">Código SKU *</label><input class="form-control" id="productSku" name="sku" maxlength="40" required placeholder="EJ-001"><small class="field-help">Letras, números, guiones y puntos.</small></div><div class="col-md-7"><label class="form-label" for="productName">Nombre del producto *</label><input class="form-control" id="productName" name="nombre" maxlength="150" required placeholder="Ej. Audífonos inalámbricos"></div><div class="col-md-6"><label class="form-label" for="productCategory">Categoría *</label><select class="form-select" id="productCategory" name="categoria_id" required><option value="">Selecciona una categoría</option></select></div><div class="col-md-3"><label class="form-label" for="productPrice">Precio (Q) *</label><input type="number" inputmode="decimal" class="form-control" id="productPrice" name="precio" min="0" max="9999999999.99" step="0.01" required></div><div class="col-md-3"><label class="form-label" for="productMin">Stock mínimo *</label><input type="number" class="form-control" id="productMin" name="stock_minimo" min="0" step="1" value="0" required></div><div class="col-12"><label class="form-label" for="productDescription">Descripción</label><textarea class="form-control" id="productDescription" name="descripcion" rows="2" maxlength="500" placeholder="Detalles opcionales del producto"></textarea></div><div class="col-md-6" id="initialStockGroup"><label class="form-label" for="productInitial">Existencia inicial</label><input type="number" class="form-control" id="productInitial" name="stock_inicial" min="0" step="1" value="0"><small class="field-help">Se registrará como un movimiento de entrada.</small></div></div></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-primary" id="productSubmit">Guardar producto</button></div></form></div></div></div>
+
+  <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalTitle" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><form id="categoryForm"><div class="modal-header"><h5 class="modal-title" id="categoryModalTitle">Nueva categoría</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button></div><div class="modal-body"><input type="hidden" name="id" id="categoryId"><label class="form-label" for="categoryName">Nombre *</label><input class="form-control mb-3" id="categoryName" name="nombre" maxlength="100" required placeholder="Ej. Accesorios"><label class="form-label" for="categoryDescription">Descripción</label><textarea class="form-control" id="categoryDescription" name="descripcion" rows="3" maxlength="255" placeholder="Descripción opcional"></textarea></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-primary" id="categorySubmit">Guardar categoría</button></div></form></div></div></div>
+
+  <div class="modal fade" id="movementModal" tabindex="-1" aria-labelledby="movementModalTitle" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><form id="movementForm"><div class="modal-header"><h5 class="modal-title" id="movementModalTitle">Registrar movimiento</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button></div><div class="modal-body"><label class="form-label" for="movementProduct">Producto *</label><select class="form-select mb-3" id="movementProduct" name="producto_id" required></select><div class="row g-3"><div class="col-md-6"><label class="form-label" for="movementType">Tipo *</label><select class="form-select" id="movementType" name="tipo" required><option value="ENTRADA">Entrada (+)</option><option value="SALIDA">Salida (−)</option></select></div><div class="col-md-6"><label class="form-label" for="movementQuantity">Cantidad *</label><input type="number" class="form-control" id="movementQuantity" name="cantidad" min="1" step="1" required value="1"></div><div class="col-12"><label class="form-label" for="movementNote">Observación</label><textarea class="form-control" id="movementNote" name="observacion" rows="2" maxlength="255" placeholder="Ej. Compra a proveedor, venta..."></textarea></div></div><div class="stock-hint mt-3" id="movementStockHint"></div></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-primary" id="movementSubmit">Registrar movimiento</button></div></form></div></div></div>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastArea" aria-live="polite"></div>
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

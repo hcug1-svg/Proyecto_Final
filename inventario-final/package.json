@@ -1,0 +1,26 @@
+{
+  "name": "inventario-final",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Proyecto final: Inventario con Node.js, Express, MySQL, HTML, JavaScript y Bootstrap",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "db:init": "node scripts/database.js init",
+    "db:seed": "node scripts/database.js seed",
+    "test": "node --test tests/*.test.js",
+    "smoke": "node scripts/smoke.js",
+    "check": "node scripts/check-syntax.js"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "bootstrap": "5.3.8",
+    "compression": "^1.8.1",
+    "dotenv": "16.6.1",
+    "express": "5.1.0",
+    "express-rate-limit": "^8.0.1",
+    "helmet": "^8.1.0",
+    "mysql2": "^3.24.6"
+  }
+}
